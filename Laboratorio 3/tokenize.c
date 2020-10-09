@@ -22,7 +22,7 @@ int main(int argc, char* argv[]) {
 
    thread_handles = (pthread_t*) malloc (thread_count*sizeof(pthread_t));
    sems = (sem_t*) malloc(thread_count*sizeof(sem_t));
-   // sems[0] should be unlocked, the others should be locked
+   
    sem_init(&sems[0], 0, 1);
    for (thread = 1; thread < thread_count; thread++)
       sem_init(&sems[thread], 0, 0);
@@ -48,7 +48,7 @@ void Usage(char* prog_name) {
 
    fprintf(stderr, "usage: %s <number of threads>\n", prog_name);
    exit(0);
-}  /* Usage */
+}  
 
 void *Tokenize(void* rank) {
    long my_rank = (long) rank;
@@ -58,7 +58,7 @@ void *Tokenize(void* rank) {
    char my_line[MAX];
    char *my_string;
 
-   /* Force sequential reading of the input */
+  
    sem_wait(&sems[my_rank]);  
    fg_rv = fgets(my_line, MAX, stdin);
    sem_post(&sems[next]);  
@@ -81,4 +81,4 @@ void *Tokenize(void* rank) {
    }
 
    return NULL;
-}  /* Tokenize */
+}  
